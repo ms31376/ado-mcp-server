@@ -60,11 +60,47 @@ in Azure DevOps under your name.
 
 ## Install
 
-### Claude Desktop (.mcpb, one click)
+### Claude Desktop - one command
 
-Double-click `ado-mcp-server.mcpb` (or drag it into Claude Desktop) and fill in the form.
+No Developer Mode needed. The script downloads the latest release and opens the installer in
+Claude Desktop; you only fill in the form.
 
-### Any MCP client (Claude Code, VS Code, Cursor, ...)
+**Windows** (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.ps1 | iex
+```
+
+**macOS** (Terminal):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.sh | bash
+```
+
+### Claude Desktop - manual
+
+1. Download the latest extension:
+   **https://github.com/YOUR-GITHUB-USER/ado-mcp-server/releases/latest/download/ado-mcp-server.mcpb**
+2. Double-click the downloaded file (or drag it onto the Claude Desktop **window**; dropping it
+   into the chat box only attaches it to a message).
+3. Click **Install** and fill in the form.
+
+To change settings later (for example the access level): Settings → Extensions → Azure DevOps →
+configure, then turn the extension off and on (or restart Claude Desktop).
+
+### Claude Code
+
+Works from any terminal; you don't need to know where Claude Code is installed:
+
+```bash
+claude mcp add --scope user azure-devops \
+  -e ADO_URL=https://server/Collection -e ADO_PAT=YOUR_PAT -e ADO_ACCESS_LEVEL=read \
+  -- uvx ado-mcp-server
+```
+
+Then run `/mcp` inside Claude Code to check the connection.
+
+### Other MCP clients (VS Code, Cursor, ...)
 
 ```json
 {
@@ -83,6 +119,12 @@ Double-click `ado-mcp-server.mcpb` (or drag it into Claude Desktop) and fill in 
 }
 ```
 
+To run the latest code from GitHub instead of PyPI, use
+`"args": ["--from", "git+https://github.com/YOUR-GITHUB-USER/ado-mcp-server", "ado-mcp-server"]`.
+
+All methods need [uv](https://docs.astral.sh/uv/) except the Claude Desktop extension,
+which manages Python by itself.
+
 ## Configuration
 
 | Variable | Default | Description |
@@ -96,6 +138,17 @@ Double-click `ado-mcp-server.mcpb` (or drag it into Claude Desktop) and fill in 
 | `ADO_IGNORE_PROXY` | `false` | Ignore `HTTP(S)_PROXY` (useful for internal servers) |
 | `ADO_VERIFY_SSL` | `true` | SSL verification |
 | `ADO_CA_BUNDLE` | | Path to a company CA certificate (.pem) |
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| `401 Unauthorized` | The PAT is wrong, expired or missing a scope. Copy it again without spaces. |
+| Timeouts with an internal server | A proxy/VPN app is in the way: enable **Ignore system proxy** (`ADO_IGNORE_PROXY=true`). |
+| "The server returned an HTML page" | Wrong server URL, or a sign-in page in between. Use the collection URL, e.g. `https://server/DefaultCollection`. |
+| SSL certificate error | Set your company CA certificate (`ADO_CA_BUNDLE`). |
+| Tool count did not change after changing the access level | Turn the extension off and on, or restart Claude Desktop. Check with `whoami`. |
+| Claude says no Azure DevOps tools are connected | Make sure the chat is in the Claude Desktop app (not the browser) and the extension is enabled in the chat's tools menu. |
 
 ## Development
 

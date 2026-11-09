@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.github/
+.env
+dist/
+tests/
+uv.lock
+install.ps1
+install.sh
+.gitattributes

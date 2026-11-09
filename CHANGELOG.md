@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.2.0
+- One-command installers for Claude Desktop (`install.ps1`, `install.sh`), install guide for
+  Claude Code and other clients, troubleshooting section.
 - Write tools with a two-step preview: `create_work_item`, `create_bug`, `update_work_item`,
   `link_work_items`, `add_comment`, `create_test_case`, `add_test_cases_to_suite`,
   `add_pull_request_comment`, `run_pipeline`.
