@@ -68,34 +68,34 @@ Claude Desktop; you only fill in the form.
 **Windows** (PowerShell):
 
 ```powershell
-irm https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/ms31376/ado-mcp-server/main/install.ps1 | iex
 ```
 
 **macOS** (Terminal):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ms31376/ado-mcp-server/main/install.sh | bash
 ```
 
 ### Claude Desktop - manual
 
 1. Download the latest extension:
-   **https://github.com/YOUR-GITHUB-USER/ado-mcp-server/releases/latest/download/ado-mcp-server.mcpb**
+   **https://github.com/ms31376/ado-mcp-server/releases/latest/download/ado-mcp-server.mcpb**
 2. Double-click the downloaded file (or drag it onto the Claude Desktop **window**; dropping it
    into the chat box only attaches it to a message).
 3. Click **Install** and fill in the form.
 
-To change settings later (for example the access level): Settings → Extensions → Azure DevOps →
-configure, then turn the extension off and on (or restart Claude Desktop).
+To change settings later (for example the access level): open Claude Desktop **Settings →
+Customize → Connectors** (called **Extensions** in some versions), select **Azure DevOps**,
+change the settings, then turn the extension off and on (or restart Claude Desktop).
 
 ### Claude Code
 
-Works from any terminal; you don't need to know where Claude Code is installed:
+Works from any terminal (PowerShell, cmd, bash); you don't need to know where Claude Code is
+installed. One line:
 
-```bash
-claude mcp add --scope user azure-devops \
-  -e ADO_URL=https://server/Collection -e ADO_PAT=YOUR_PAT -e ADO_ACCESS_LEVEL=read \
-  -- uvx ado-mcp-server
+```
+claude mcp add --scope user azure-devops -e ADO_URL=https://server/Collection -e ADO_PAT=YOUR_PAT -e ADO_ACCESS_LEVEL=read -- uvx --from git+https://github.com/ms31376/ado-mcp-server ado-mcp-server
 ```
 
 Then run `/mcp` inside Claude Code to check the connection.
@@ -107,7 +107,7 @@ Then run `/mcp` inside Claude Code to check the connection.
   "mcpServers": {
     "azure-devops": {
       "command": "uvx",
-      "args": ["ado-mcp-server"],
+      "args": ["--from", "git+https://github.com/ms31376/ado-mcp-server", "ado-mcp-server"],
       "env": {
         "ADO_URL": "https://dev.azure.com/YourOrg",
         "ADO_PAT": "...",
@@ -119,8 +119,8 @@ Then run `/mcp` inside Claude Code to check the connection.
 }
 ```
 
-To run the latest code from GitHub instead of PyPI, use
-`"args": ["--from", "git+https://github.com/YOUR-GITHUB-USER/ado-mcp-server", "ado-mcp-server"]`.
+This runs the code straight from GitHub; `uvx` downloads it on first start. A PyPI package
+(`uvx ado-mcp-server`) is planned.
 
 All methods need [uv](https://docs.astral.sh/uv/) except the Claude Desktop extension,
 which manages Python by itself.
@@ -154,7 +154,7 @@ which manages Python by itself.
 
 ```bash
 uv run --group dev pytest -q             # tests
-uv run mcp dev src/ado_mcp/server.py     # MCP Inspector
+uv run mcp dev server/main.py            # MCP Inspector
 npx @anthropic-ai/mcpb pack . ado-mcp-server.mcpb
 ```
 
