@@ -7,3 +7,6 @@ __pycache__/
 dist/
 tests/
 uv.lock
+install.ps1
+install.sh
+.gitattributes
