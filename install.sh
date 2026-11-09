@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Installs the latest Azure DevOps MCP extension into Claude Desktop (macOS).
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/ms31376/ado-mcp-server/main/install.sh | bash
 set -euo pipefail
 
-REPO="YOUR-GITHUB-USER/ado-mcp-server"
+REPO="ms31376/ado-mcp-server"
 URL="https://github.com/$REPO/releases/latest/download/ado-mcp-server.mcpb"
 FILE="$HOME/Downloads/ado-mcp-server.mcpb"
 

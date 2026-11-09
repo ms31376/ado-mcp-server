@@ -1,9 +1,9 @@
 # Installs the latest Azure DevOps MCP extension into Claude Desktop (Windows).
 # Usage (PowerShell):
-#   irm https://raw.githubusercontent.com/YOUR-GITHUB-USER/ado-mcp-server/main/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/ms31376/ado-mcp-server/main/install.ps1 | iex
 
 $ErrorActionPreference = 'Stop'
-$Repo = 'YOUR-GITHUB-USER/ado-mcp-server'
+$Repo = 'ms31376/ado-mcp-server'
 $Url  = "https://github.com/$Repo/releases/latest/download/ado-mcp-server.mcpb"
 $Dir  = Join-Path $env:USERPROFILE 'Downloads'
 if (-not (Test-Path $Dir)) { $Dir = $env:TEMP }
