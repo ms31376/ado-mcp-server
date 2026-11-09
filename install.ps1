@@ -25,12 +25,15 @@ try {
     return
 }
 
-# 2. Open it with Claude Desktop (the .mcpb file type is registered by Claude Desktop)
-$registered = Test-Path 'Registry::HKEY_CLASSES_ROOT\.mcpb'
-if ($registered) {
+# 2. Open it with Claude Desktop
+$opened = $false
+try {
+    Start-Process -FilePath $File -ErrorAction Stop
+    $opened = $true
     Write-Host 'Opening the installer in Claude Desktop...'
-    Start-Process -FilePath $File
-} else {
+} catch { }
+
+if (-not $opened) {
     $claude = (Test-Path "$env:LOCALAPPDATA\AnthropicClaude") -or
               (Get-AppxPackage -Name '*Claude*' -ErrorAction SilentlyContinue)
     if (-not $claude) {
@@ -38,9 +41,10 @@ if ($registered) {
         Write-Host 'Install it from https://claude.ai/download and run this command again.'
         return
     }
-    Write-Host 'Could not open the file automatically.' -ForegroundColor Yellow
-    Write-Host 'Drag the selected file onto the Claude Desktop window (not into the chat box),'
-    Write-Host 'or install it from Claude Desktop: Settings > Extensions > Install extension.'
+    Write-Host 'Windows could not open the file automatically. Install it from Claude Desktop:' -ForegroundColor Yellow
+    Write-Host '  Settings > Customize > Connectors > Add > install extension (choose the file below)'
+    Write-Host '  or, with Developer Mode on: menu > Developer > Extensions > install from file'
+    Write-Host "  File: $File"
     Start-Process explorer.exe "/select,`"$File`""
 }
 
