@@ -1,0 +1,109 @@
+{
+  "manifest_version": "0.4",
+  "name": "ado-mcp-server",
+  "display_name": "Azure DevOps (Server & Services)",
+  "version": "0.2.0",
+  "description": "Work items, test plans, repos and pipelines from Azure DevOps Server (on-premises) or Azure DevOps Services, with read-only by default.",
+  "long_description": "Connects Claude to Azure DevOps with your own Personal Access Token, so you only see what your account can see.\n\n**Access levels**\n- `read` (default): search and read only\n- `write`: create and update work items, bugs, test cases, links, comments, run pipelines\n- `full`: also deletes\n\nTools above the chosen level are not loaded at all. Every write tool first returns a preview and changes nothing until called again after your approval.",
+  "author": {
+    "name": "Mehrdad Abdollahian"
+  },
+  "license": "MIT",
+  "keywords": [
+    "azure devops",
+    "tfs",
+    "test cases",
+    "work items",
+    "pipelines"
+  ],
+  "server": {
+    "type": "uv",
+    "entry_point": "server/main.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${__dirname}",
+        "server/main.py"
+      ],
+      "env": {
+        "ADO_URL": "${user_config.server_url}",
+        "ADO_PAT": "${user_config.pat}",
+        "ADO_PROJECT": "${user_config.default_project}",
+        "ADO_API_VERSION": "${user_config.api_version}",
+        "ADO_ACCESS_LEVEL": "${user_config.access_level}",
+        "ADO_IGNORE_PROXY": "${user_config.ignore_proxy}",
+        "ADO_VERIFY_SSL": "${user_config.verify_ssl}",
+        "ADO_CA_BUNDLE": "${user_config.ca_bundle}"
+      }
+    }
+  },
+  "tools_generated": true,
+  "user_config": {
+    "server_url": {
+      "type": "string",
+      "title": "Server / organization URL",
+      "description": "On-premises: https://server/CollectionName (or http://server:8080/tfs/DefaultCollection). Cloud: https://dev.azure.com/YourOrg",
+      "required": true
+    },
+    "pat": {
+      "type": "string",
+      "title": "Personal Access Token",
+      "description": "Your own PAT. Read scopes are enough for 'read'; 'write'/'full' need Read & Write on Work Items and Test Management.",
+      "sensitive": true,
+      "required": true
+    },
+    "default_project": {
+      "type": "string",
+      "title": "Default project (optional)",
+      "description": "Used when a request does not name a project.",
+      "required": false,
+      "default": ""
+    },
+    "access_level": {
+      "type": "string",
+      "title": "Access level: read, write or full",
+      "description": "read = read only (recommended). write = create/update work items, comments, links, run pipelines. full = also deletes.",
+      "required": true,
+      "default": "read"
+    },
+    "api_version": {
+      "type": "string",
+      "title": "API version",
+      "description": "7.0 for Server 2022 and cloud, 6.0 for Server 2020, 5.0 for Server 2019.",
+      "required": true,
+      "default": "7.0"
+    },
+    "ignore_proxy": {
+      "type": "boolean",
+      "title": "Ignore system proxy",
+      "description": "Turn on if the server is on your internal network and a proxy/VPN app causes timeouts.",
+      "required": false,
+      "default": false
+    },
+    "verify_ssl": {
+      "type": "boolean",
+      "title": "Verify SSL certificate",
+      "description": "Turn off only for testing with a self-signed certificate; prefer setting a CA certificate file.",
+      "required": false,
+      "default": true
+    },
+    "ca_bundle": {
+      "type": "file",
+      "title": "Company CA certificate (optional)",
+      "description": "A .pem file if your server uses a certificate from an internal CA.",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  }
+}

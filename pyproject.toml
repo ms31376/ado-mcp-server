@@ -1,0 +1,30 @@
+[project]
+name = "ado-mcp-server"
+version = "0.2.0"
+description = "MCP server for Azure DevOps Server (on-premises) and Azure DevOps Services: work items, test plans, repos and pipelines, with access levels."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Mehrdad Abdollahian" }]
+keywords = ["mcp", "azure-devops", "tfs", "claude", "test-management"]
+dependencies = [
+    "mcp>=1.10,<2",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+ado-mcp-server = "ado_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ado_mcp"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/YOUR-GITHUB-USER/ado-mcp-server"
+Issues = "https://github.com/YOUR-GITHUB-USER/ado-mcp-server/issues"
